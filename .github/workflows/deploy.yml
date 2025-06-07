@@ -3,10 +3,11 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # o 'master', si usas esa rama
+      - main
 
 permissions:
-  contents: write  # necesario para push a gh-pages
+  contents: write
+  id-token: write  # ← Esto es esencial para que el deploy funcione
 
 jobs:
   deploy:
@@ -21,7 +22,7 @@ jobs:
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .  # publica todo desde la raíz del repo
+          path: .  # Publica todo el contenido del repo
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
