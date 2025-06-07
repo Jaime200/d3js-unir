@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fast Food Charts</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- Carga los scripts con los módulos ya definidos -->
+  <script src="bubble.js" defer></script>
+  <script src="treemap.js" defer></script>
+  <script src="scatter.js" defer></script>
+</head>
+<body>
+  <nav>
+    <button onclick="loadChart('bubble')">Bubble Chart</button>
+    <button onclick="loadChart('treemap')">Treemap</button>
+    <button onclick="loadChart('scatter')">Scatter Plot</button>
+  </nav>
+  <div id="tooltip" class="tooltip"></div>
+  <svg></svg>
+
+   <script>
+    let currentScript = null;
+    let currentChart = null;
+
+    function loadChart(chartName) {
+      d3.selectAll("svg > *").remove();
+      d3.select("#tooltip").style("opacity", 0);
+
+      if (currentChart && currentChart.destroy) {
+        currentChart.destroy();
+      }
+
+      if (currentScript) {
+        document.body.removeChild(currentScript);
+      }
+
+      const script = document.createElement("script");
+      script.src = `${chartName}.js`;
+      script.type = "text/javascript";
+      script.defer = true;
+
+      script.onload = () => {
+        const chartModule = window[`${chartName}Chart`];
+        if (chartModule && chartModule.init) {
+          currentChart = chartModule;
+          chartModule.init(d3.select("svg"), d3.select("#tooltip"));
+        } else {
+          console.error(`Chart module '${chartName}' not found`);
+        }
+      };
+
+      document.body.appendChild(script);
+      currentScript = script;
+    }
+
+    // Load default chart
+    loadChart("scatter");
+  </script>
+</body>
+</html>

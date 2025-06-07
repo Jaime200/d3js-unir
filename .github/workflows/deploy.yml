@@ -1,0 +1,27 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # o 'master', si usas esa rama
+
+permissions:
+  contents: write  # necesario para push a gh-pages
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload static site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .  # publica todo desde la raíz del repo
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
