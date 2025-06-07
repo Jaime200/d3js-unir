@@ -3,26 +3,28 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main  # O cambia a la rama que estés usando
 
 permissions:
   contents: write
-  id-token: write  # ← Esto es esencial para que el deploy funcione
+  id-token: write
+  pages: write  # 🔧 ESTE PERMISO ES CLAVE
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Pages
+      - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload static site
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .  # Publica todo el contenido del repo
+          path: .  # Publica toda la raíz del proyecto
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
